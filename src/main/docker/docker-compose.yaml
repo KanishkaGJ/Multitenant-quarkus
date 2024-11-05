@@ -8,35 +8,27 @@ services:
     ports:
       - 80:80
       - 443:443
-    network_mode: host
+
   maxilog-postgresql:
     image: postgres:11.5
     restart: always
     ports:
       - "5432:5432"
     volumes:
-      - ./data/postgresDB:/var/lib/postresql/data
+      - ./data/postgresDB:/var/lib/postgresql/data
       - ./data/postgres-entrypoint:/docker-entrypoint-initdb.d
     environment:
-      - POSTGRES_DB=maxilog-default
-      - POSTGRES_USER=maxilog-default-user
-      - POSTGRES_PASSWORD=maxilog-default-password
+      POSTGRES_DB: maxilog-default
+      POSTGRES_USER: maxilog-default-user
+      POSTGRES_PASSWORD: maxilog-default-password
+
   maxilog-keycloak:
-    image: jboss/keycloak:10.0.0
+    image: quay.io/keycloak/keycloak:latest
     restart: always
     ports:
       - '8180:8080'
-    volumes:
-      - ./data/realm:/opt/jboss/keycloak/realm-config
-    command:
-      - "-b 0.0.0.0"
-      - "-Dkeycloak.migration.action=import"
-      - "-Dkeycloak.migration.provider=singleFile"
-      - "-Dkeycloak.migration.file=/opt/jboss/keycloak/realm-config/realm-init.json"
-      - "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
     environment:
-      #KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-config/realm-init.json
-      DB_VENDOR: POSTGRES
+      DB_VENDOR: postgres
       DB_ADDR: maxilog-postgresql
       DB_PORT: 5432
       DB_DATABASE: keycloak
@@ -44,4 +36,11 @@ services:
       DB_PASSWORD: maxilog-keycloak-password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
-
+    command: >
+      start-dev 
+      --import-realm 
+      -Dkeycloak.migration.provider=singleFile
+      -Dkeycloak.migration.file=/opt/keycloak/data/import/realm-init.json
+      -Dkeycloak.migration.strategy=IGNORE_EXISTING
+    volumes:
+      - ./data/realm:/opt/keycloak/data/import

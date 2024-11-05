@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.WebApplicationException;
+import java.sql.SQLOutput;
 
 @Singleton
 public class TenantConfigService {
@@ -50,6 +51,7 @@ public class TenantConfigService {
         } catch (Exception e) {
             //TODO delete database and realm
             e.printStackTrace();
+            System.out.println(e);
             throw new WebApplicationException("Error while creating new tenant");
         }
 

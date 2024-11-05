@@ -57,7 +57,7 @@ public class EnvirementService {
     public void init() {
         keycloak = KeycloakBuilder
                 .builder()
-                .serverUrl(host.concat("/auth")).realm("master")
+                .serverUrl(host).realm("master")
                 .clientId("admin-cli")
                 //.clientSecret(clientSecret)
                 //.grantType(OAuth2Constants.CLIENT_CREDENTIALS)
@@ -114,12 +114,20 @@ public class EnvirementService {
         configDTO.setOidcSecret("back");
 
         RealmRepresentation newRealm = new RealmRepresentation();
+
+        System.out.println(1);
+        System.out.println(newRealm);
+
         newRealm.setRealm(configDTO.getOidcRealm());
         newRealm.setEnabled(true);
         keycloak.realms().create(newRealm);
 
         RealmRepresentation realmRepresentation = mapper.readValue(new File("../src/main/docker/data/realm/realm.json"), RealmRepresentation.class);
         PartialImportRepresentation partialImport = new PartialImportRepresentation();
+
+        System.out.println(2);
+        System.out.println(partialImport);
+
         partialImport.setIfResourceExists(PartialImportRepresentation.Policy.SKIP.toString());
         partialImport.setClients(realmRepresentation.getClients());
         partialImport.setGroups(realmRepresentation.getGroups());

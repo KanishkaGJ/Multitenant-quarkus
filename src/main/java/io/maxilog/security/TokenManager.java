@@ -48,7 +48,7 @@ public class TokenManager {
         if (tenant == null || Objects.equals(tenant, "default")) {
             keycloak = KeycloakBuilder
                     .builder()
-                    .serverUrl(host.concat("/auth")).realm(this.realm)
+                    .serverUrl(host).realm(this.realm)
                     .clientId(clientId).clientSecret(clientSecret)
                     .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .build();
@@ -56,7 +56,7 @@ public class TokenManager {
             TenantConfig tenantConfig = TenantConfigs.findOptionalClient(tenant).orElseThrow(() -> new NotFoundException("No config for this client"));
             keycloak = KeycloakBuilder
                     .builder()
-                    .serverUrl(host.concat("/auth")).realm(tenantConfig.getOidcRealm())
+                    .serverUrl(host).realm(tenantConfig.getOidcRealm())
                     .clientId(tenantConfig.getOidcClient()).clientSecret(tenantConfig.getOidcSecret())
                     .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .build();

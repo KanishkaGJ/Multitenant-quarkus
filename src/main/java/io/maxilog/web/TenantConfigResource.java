@@ -41,6 +41,7 @@ public class TenantConfigResource {
     public Response addClient(@PathParam("tenant") String tenant) throws URISyntaxException {
         LOGGER.debug("REST request to save tenant : {}", tenant);
         tenantConfigService.save(new TenantConfigDTO(tenant));
+
         return Response
                 .created(new URI("/tenants/" + tenant + "/config"))
                 .build();

@@ -1,6 +1,6 @@
 {
-  "id": "default",
-  "realm": "default",
+  "id": "default1",
+  "realm": "default1",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
